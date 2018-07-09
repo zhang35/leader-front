@@ -1,0 +1,30 @@
+.block-center.mt-xl.wd-xl(ng-controller="LoginFormController")
+  // START panel
+  .panel.panel-dark.panel-flat
+    .panel-heading.text-center
+      p 用户入口
+      //- a(href="#")
+      //-   img.block-center.img-rounded(src='app/img/logo.png', alt='Image',style='height:auto;width:100%')
+    .panel-body
+      p.text-center.pv 请您登录
+      form(role='form', ng-submit="login()", validate-form='', novalidate='').mb-lg
+        .form-group.has-feedback
+          input#exampleInputEmail1.form-control(type='text', placeholder='用户名', autocomplete="off", ng-model="account.username", required)
+          span.fa.fa-envelope.form-control-feedback.text-muted
+        .form-group.has-feedback
+          input#exampleInputPassword1.form-control(type='password', placeholder='密码', ng-model="account.password", required)
+          span.fa.fa-lock.form-control-feedback.text-muted
+
+        button.btn.btn-block.btn-primary.mt-lg(type='submit') 登录
+
+      .alert.alert-danger.text-center(ng-show='authMsg') {{authMsg}}
+
+
+  // END panel
+  .p-lg.text-center
+    span &copy;
+    span(ng-bind="app.year")
+    span  -
+    span(ng-bind="app.name")
+    //- br
+    //- span(ng-bind="app.description")

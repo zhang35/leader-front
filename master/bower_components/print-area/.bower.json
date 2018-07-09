@@ -1,0 +1,14 @@
+{
+  "name": "print-area",
+  "homepage": "https://github.com/RitsC/PrintArea",
+  "version": "2.4.1",
+  "_release": "2.4.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.4.1",
+    "commit": "c092e2e2b2f190ad5016afa168580d0ee13bc252"
+  },
+  "_source": "https://github.com/RitsC/PrintArea.git",
+  "_target": "*",
+  "_originalSource": "print-area"
+}

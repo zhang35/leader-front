@@ -1,0 +1,26 @@
+h3 信息维护
+
+#container.row(style='overflow-y: scroll; margin:0 auto')
+    .panel.panel-default(style="width:600px")
+        form(role="form")
+            .form-group
+                label.col-lg-4.h4 真实姓名： 
+                input.form-control(type="text" value="李成海")
+            .form-group
+                label.col-lg-4.h4 账   户： 
+                input.form-control(type="text" value="李成海")
+            .form-group
+                label.col-lg-4.h4 原始密码： 
+                input.form-control(type="password", style="margin:0 20")
+            .form-group
+                label.col-lg-4.h4 新密码： 
+                input.form-control(type="password")
+            .form-group
+                label.col-lg-4.h4 重复密码： 
+                input.form-control(type="password")
+            .form-group
+                label.col-lg-4.h4 电   话： 
+                input.form-control(type="text" value="13005548775")
+            p.text-center
+                button.btn.btn-success(type='button', ng-click='searchList()') 修改
+

@@ -1,0 +1,70 @@
+h4  账户信息
+
+// START row
+#container.row(style='overflow-y: scroll;')
+  .col-lg-12
+    // START panel
+    .panel.panel-default
+      .panel-body
+        form.form-horizontal
+          .form-group
+            label.col-lg-2.control-label 用户名
+            .col-lg-10
+              .form-control {{account.username}}
+          .form-group
+            label.col-lg-2.control-label 密码
+            .col-lg-10
+              .form-control
+               a(href='', ng-dialog='password', ng-dialog-data='{{account}}', ng-click='isPassword=true', ng-dialog-close-by-document='false') 点此修改密码
+          .form-group
+            label.col-lg-2.control-label 联系电话
+            .col-lg-10
+              input.form-control(type='text', placeholder='联系电话', ng-model='account.telephone')
+          .form-group
+            .col-lg-offset-2.col-lg-10
+              button.btn.btn-sm.btn-success(ng-click='saveAccount()') 保存
+    // END panel
+  // END row
+
+script(type="text/ng-template", id="upload")
+  div(ng-controller='ImageCropController', ng-class='isUploading')
+    h3.mt0 修改 LOGO
+    .row
+      .col-md-3
+        .panel
+          .panel-heading
+            a.pull-right(href="#", ng-click="reset()"): small.fa.fa-refresh.text-muted
+            | 选择图片
+          .panel-body
+            .form-group
+              input#fileInput.form-control(filestyle="", type='file', data-class-button='btn btn-default', data-class-input="form-control", data-button-text="", nv-file-select, uploader="uploader")
+            br
+            .imgcrop-preview(data-text="Cropped Image")
+              img(ng-src='{{croppedImage}}')
+        button.btn.btn-primary(ng-click='upload()') 确定
+      .col-md-9
+        .panel
+          .panel-body
+            .imgcrop-area
+              img-crop(image='image', result-image='croppedImage', area-type="{{imgcropType}}")
+
+script(type="text/ng-template", id="password")
+  div(ng-controller='PasswordCtrl')
+    h3.mt0 修改密码
+    .row
+      form.form-horizontal
+        .form-group
+          label.col-lg-3.control-label 原密码
+          .col-lg-8
+            input.form-control(type='password', placeholder='原密码', ng-model='password.old')
+        .form-group
+          label.col-lg-3.control-label 新密码
+          .col-lg-8
+            input.form-control(type='password', placeholder='新密码', ng-model='password.cur')
+        .form-group
+          label.col-lg-3.control-label 确认密码
+          .col-lg-8
+            input.form-control(type='password', placeholder='确认密码', ng-model='password.dup')
+    .row
+      .col-lg-offset-1
+        button.btn.btn-primary(type='button', ng-click='change()') 确定

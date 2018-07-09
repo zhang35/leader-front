@@ -1,0 +1,45 @@
+[
+
+    {
+        "text": "考评",
+        "heading": "true"
+    },
+
+    {
+        "text": "考评页面",
+        "sref": "app.evaluate",
+        "icon": "fa fa-pencil-square-o"
+    },
+    {
+        "text": "绩效搜索",
+        "sref": "app.search",
+        "icon": "fa fa-search"
+    },
+
+    {
+        "text": "成长曲线",
+        "sref": "app.graph",
+        "icon": "fa fa-line-chart"
+    },
+    {
+        "text": "设置",
+        "heading": "true"
+    },
+
+    {
+        "text": "信息维护",
+        "sref": "app.setting",
+        "icon": "fa fa-cog"
+    },
+
+    {
+        "text": "联系我们",
+        "sref": "app.contact",
+        "icon": "fa fa-envelope"
+    },
+    {
+        "text": "退出",
+        "sref": "logout",
+        "icon": "em icon-logout"
+    }
+]

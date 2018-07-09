@@ -1,0 +1,71 @@
+h4 个人信息维护
+
+#container.row(style='overflow-y: scroll')
+    .col-lg-9
+        // START panel
+        .panel.panel-default
+            tabset
+                tab(heading='搜索结果')
+                    // START table-responsive
+                    .table-responsive
+                        table.table.table-condensed.table-bordered.table-hover
+                            thead
+                                tr
+                                    th.col-lg-1 序号
+                                    th.col-lg-2 日期
+                                    th.col-lg-2 指标
+                                    th.col-lg-1 得分
+                                    th.col-lg-3 领导评语
+                                    th 操作
+                            tbody(ng-repeat='item in items')
+                                tr
+                                    td {{$index+1}}
+                                    td {{item.standardDate | date:'yyyy-MM-dd':'UTC'}}
+                                    td {{item.indexName}}
+                                    td {{item.totalPoint}}
+                                    td {{item.leaderName}}：{{item.leaderComment}}
+                                    td
+                                        button.btn.btn-link(type='button', ng-click='alert("id:"+item.id)')
+                                            span 查看当日
+                            tfoot
+                                tr(ng-if='results.length===0')
+                                    td(colspan='11') 暂无数据
+                    // END table-responsive
+                    .row
+                        .col-lg-6
+                        .col-lg-6.text-right
+                            pagination.pagination-sm(total-items='totalItems', ng-model='search.page', ng-change='pageChanged()', items-per-page='search.size', max-size='5', boundary-links='true', previous-text='‹', next-text='›', first-text='«', last-text='»')
+
+
+    form.col-lg-3(name='filtrate')
+        h3.m0.pb-lg 筛选
+
+            p
+                .input-group
+                    input.form-control(type='text', placeholder='开始日期', ng-model='timeStart', datepicker-popup='{{format}}', is-open='opened.start', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭')
+                    span.input-group-btn
+                        button.btn.btn-default(type='button', ng-click='open($event, "start")')
+                            em.fa.fa-calendar
+            p
+                .input-group
+                    input.form-control(type='text', placeholder='截止日期', ng-model='timeEnd', datepicker-popup='{{format}}', is-open='opened.end', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭')
+                    span.input-group-btn
+                        button.btn.btn-default(type='button', ng-click='open($event, "end")')
+                            em.fa.fa-calendar
+
+            .form-group
+                label.col-lg-4.h4 类型
+                .col-lg-8
+                    select.form-control(ng-options=' item.key as item.value for item in IncreaseTypeList', ng-model='search.increaseType')
+                    .form-group.text-right
+
+            .form-group
+                label.col-lg-4.h4 含评语
+                .col-lg-8
+                    select.form-control(ng-options=' item.key as item.value for item in CommentTypeList', ng-model='search.commentType')
+                    .form-group.text-right
+            p
+                button.btn.btn-block.btn-success(type='button', ng-click='searchList()') 查找
+            p
+                button.btn.btn-block.btn-default(type='button', ng-click='resetSearch()') 重置
+

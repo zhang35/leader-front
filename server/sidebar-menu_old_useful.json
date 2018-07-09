@@ -1,0 +1,74 @@
+[
+    {
+        "text": "互动",
+        "heading": "true"
+    },
+    {
+        "text": "互动审核",
+        "sref": "app.social-items",
+        "icon": "fa fa-comments"
+    },
+    {
+        "text": "审核设置",
+        "sref": "app.filters",
+        "icon": "fa fa-filter"
+    },
+    {
+        "text": "媒体",
+        "heading": "true"
+    },
+    {
+        "text": "素材管理",
+        "sref": "app.ads",
+        "icon": "fa fa-bullhorn"
+    },
+    {
+        "text": "播放管理",
+        "sref": "app.display",
+        "icon": "fa fa-gear"
+    },
+    {
+        "text": "活动管理",
+        "sref": "app.activities",
+        "icon": "fa fa-bell"
+    },
+    {
+        "text": "统计",
+        "heading": "true"
+    },
+    {
+        "text": "互动统计",
+        "sref": "app.adstatistics",
+        "icon": "fa fa-comments-o"
+    },
+    {
+        "text": "传播统计",
+        "sref": "app.customerstatistics",
+        "icon": "fa fa-calculator"
+    },
+    {
+        "text": "设置",
+        "heading": "true"
+    },
+
+    {
+        "text": "账户信息",
+        "sref": "app.account",
+        "icon": "fa fa-credit-card"
+    },
+    {
+        "text": "添加盒子",
+        "sref": "app.addbox",
+        "icon": "fa fa-plus"
+    },
+    {
+        "text": "联系我们",
+        "sref": "app.contact",
+        "icon": "fa fa-envelope"
+    },
+    {
+        "text": "退出",
+        "sref": "logout",
+        "icon": "em icon-logout"
+    }
+]

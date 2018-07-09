@@ -1,0 +1,51 @@
+.pull-right
+  p.m0
+    small.mr 启用黑名单
+    label.switch.pull-right
+      input(type='checkbox', checked="checked", ng-model='enabled')
+      span(ng-click='toggleEnabled(!enabled)')
+h4 黑名单
+
+// START panel
+.panel.panel-default
+  .table-responsive
+    table.table.table-bordered.table-hover
+      thead
+        tr
+          th 头像
+          th 昵称
+          th 来源
+          //th 地区
+          th 操作
+          th(check-all)
+            .checkbox.c-checkbox(data-toggle="tooltip",data-title="全选")
+              label
+                input(type='checkbox')
+                span.fa.fa-check
+      tbody
+        tr(ng-repeat='user in blacklist')
+          td
+            .media
+              img.img-responsive.img-circle(ng-src='//wx.vshangping.com/weipage/file/{{user.headportrait || "no-pic.png"}}')
+          td {{user.nickname}}
+          td {{user.source}}
+          //td 北京
+          td
+            button.btn.btn-danger(ng-click='remove(user.blacklistid)') 删除
+          td
+            .checkbox.c-checkbox
+              label
+                input.delete(type='checkbox', value='{{user.blacklistid}}')
+                span.fa.fa-check
+  // END table-responsive
+  .panel-footer
+    .row
+      .col-lg-2
+        .input-group
+          input.input-sm.form-control(type='text', placeholder='查找', ng-model='findContent')
+          span.input-group-btn
+            button.btn.btn-sm.btn-default(type='button', ng-click='find(findContent)') 查找
+      .col-lg-8
+      .col-lg-2
+        button.pull-right.btn.btn-sm.btn-danger(ng-click='removeAll()') 批量删除
+// END panel

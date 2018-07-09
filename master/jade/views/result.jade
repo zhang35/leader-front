@@ -1,0 +1,59 @@
+h3 提交成功！
+style.
+    tr th {
+        text-align:center;
+    }
+    tbody tr td {
+        text-align:center;
+    }
+    input {
+        text-align:center;
+    }
+
+p
+    span.col-sm-2 姓名：{{$root.account.username}}
+    span 部门：{{data[0].departmentName}}
+    span.col-sm-2  日期：{{standardDate}}
+hr
+#container.row(style='overflow-y: scroll')
+
+    .col-sd-12        
+        // START panel
+        .panel.panel-default
+                .form-group(ng-repeat='data_i in data')
+                    // START table-responsive
+                    h4(style="text-align:center") {{data_i.indexName}}
+                    hr
+                    .table-responsive
+                        table.table.table-bordered.table-condensed.table-hover
+                            thead
+                                tr
+                                    th.col-sm-1 序号
+                                    th.col-sm-1 指标名称 
+                                    th.col-sm-1 加分内容
+                                    th.col-sm-1 数量
+                                    th.col-sm-2 加分情况说明
+                                    th.col-sm-1 减分内容
+                                    th.col-sm-1 数量
+                                    th.col-sm-2 减分情况说明
+                                    th.col-sm-1 得分
+                            tbody(ng-repeat='item in data_i.items')
+                                tr
+                                    td {{$index+1}}
+                                    td {{item.indexName}}
+                                    td {{item.increaseName}}({{item.increasePoint}}分/{{item.increaseUnit}})
+                                    td {{item.increaseNum}}
+                                    td {{item.increaseDetail}}
+                                    td {{item.decreaseName}}(-{{item.decreasePoint}}分/{{item.decreaseUnit}})
+                                    td {{item.increaseNum}}
+                                    td {{item.decreaseDetail}}
+                                    td {{item.totalPoint}}
+                            tfoot
+                                tr(ng-if='results.length===0')
+                                    td(colspan='11') 暂无数据
+                    // END table-responsive
+                    hr
+                p
+                    span
+                        button.btn.btn-block.btn-success(type='button', ng-click='back()') 返回
+        

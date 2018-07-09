@@ -1,0 +1,32 @@
+{
+  "name": "jquery-classyloader",
+  "authors": [
+    "Easin Yu <easin.yu@hotmail.com>"
+  ],
+  "description": "jquery plugin for loader animation",
+  "main": "js/jquery.classyloader.js",
+  "keywords": [
+    "classyloader",
+    "jquery-classyloader"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/easin/jquery-classyloader",
+  "private": false,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "973286ff73",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "973286ff730cb63ba89ac94498732a14c31f4182"
+  },
+  "_source": "https://github.com/easin/jquery-classyloader.git",
+  "_target": "*",
+  "_originalSource": "jquery-classyloader",
+  "_direct": true
+}
