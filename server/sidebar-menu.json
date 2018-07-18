@@ -1,17 +1,11 @@
 [
 
     {
-        "text": "考评",
+        "text": "量化管理系统",
         "heading": "true"
     },
-
     {
-        "text": "考评页面",
-        "sref": "app.evaluate",
-        "icon": "fa fa-pencil-square-o"
-    },
-    {
-        "text": "绩效搜索",
+        "text": "绩效查看",
         "sref": "app.search",
         "icon": "fa fa-search"
     },

@@ -22,14 +22,24 @@
 
 
          //默认查看最近30天的成绩
-                $scope.timeStart = moment().subtract(30, 'days').format('YYYY-MM-DD');
-            $scope.timeEnd = moment().format('YYYY-MM-DD');
-        $scope.search = {
-            personId: $rootScope.account.id,
-            departmentId: 4,
-            timeStart: $scope.timeStart,
-            timeEnd: $scope.timeEnd,
+         $scope.search = {
+            timeStart: moment().subtract(30, 'days').format('YYYY-MM-DD'),
+            timeEnd: moment().format('YYYY-MM-DD'),
         };
+
+        var loadPersons = function(){
+            $http.get($rootScope.url + '/account-service/person/list?leader=' + $rootScope.account.id)
+            .then(function (response) {
+                if (response.data.status === 200) {
+                    $scope.persons = response.data.data;
+                } else {
+                    $.notify(response.data.message, 'danger');
+                }
+            }, function (x) {
+                $.notify('服务器出了点问题，我们正在处理', 'danger');
+            });
+        } 
+
         var chartOptions = {
             // ///Boolean - Whether grid lines are shown across the chart
             scaleShowGridLines: true,
@@ -83,16 +93,15 @@
         var myNewChart = new Chart(ctx);
 
         myNewChart.Line(chartData, chartOptions);
-        var
-        buildParam = function () {
+        var buildParam = function () {
             var param = {
                 method: 'GET',
-                url: $rootScope.url + '/standard-service/statics/search',
+                url: $rootScope.url + '/standard-service/statics/search', //查找其下属人员的成绩
                 params: $scope.search
             };
             return param;
-        }, 
-        loadData = function () {
+        }; 
+        var loadData = function () {
             $http(buildParam())
             .then(function (response) {
                 if (response.data.status === 200) {
@@ -112,100 +121,10 @@
             }, function (x) {
                 $.notify('服务器出了点问题，我们正在处理', 'danger');
             });
-        },            
-        resetList = function () {
-            if (!!$scope.timeStart) {
-                var date = new Date($scope.timeStart);
-                $scope.search.timeStart = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' 00:00:00';
-            }
-
-            if (!!$scope.timeEnd) {
-                var date = new Date($scope.timeEnd);
-                $scope.search.timeEnd = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' 23:59:59';
-            }
-
-            loadData();
-        }, 
-        loadRelations = function () {
-            $http.get($rootScope.url + '/account-service/relations/list?personId=' + $rootScope.account.id)
-            .then(function (response) {
-                if (response.data.status === 200) {
-                    $scope.relations = response.data.data;
-                    $scope.department = $scope.relations[0];
-                    loadIndex();
-                } else {
-                    $.notify(response.data.message, 'danger');
-                }
-            }, function (x) {
-                $.notify('服务器出了点问题，我们正在处理', 'danger');
-            });
-        };
-        var loadIndex = function () {
-
-            $http.get($rootScope.url + '/standard-service/detail/list?departmentId=' + $scope.department.id + '&level=0')
-                .then(function (response) {
-                    if (response.data.status === 200) {
-                        $scope.data = response.data.data;
-                        $scope.data.forEach(function (item) {
-                            $http.get($rootScope.url + '/standard-service/detail/list?fatherId=' + item.id + '&level=1')
-                                .then(function (response) {
-                                    if (response.data.status === 200) {
-                                        item['items'] = response.data.data;
-                                    } else {
-                                        $.notify(response.data.message, 'danger');
-                                    }
-                                }, function (x) {
-                                    $.notify('服务器出了点问题，我们正在处理', 'danger');
-                                });
-                        })
-                    } else {
-                        $.notify(response.data.message, 'danger');
-                    }
-                }, function (x) {
-                    $.notify('服务器出了点问题，我们正在处理', 'danger');
-                });
-            }
+        };            
 
 
-        $scope.searchList = resetList;
-        $scope.resetSearch = function () {
-            $scope.search.departmentId = 0;
-            $scope.search.timeStart = '';
-            $scope.search.timeEnd = '';
-            $scope.timeStart = '';
-            $scope.timeEnd = '';
-            resetList();
-        };
-        //***需要替换为从后台获取的数据***
-        /* $scope.data = [
-             {
-                 standard_date: "2018-04-24",
-                 total_point: 60,
-             },
-             {
-                 standard_date: "2018-04-25",
-                 total_point: 100,
-             },
-             {
-                 standard_date: "2018-04-26",
-                 total_point: 80,
-             },
-             {
-                 standard_date: "2018-04-27",
-                 total_point: 100,
-             },
-             {
-                 standard_date: "2018-04-28",
-                 total_point: 70,
-             },
-             {
-                 standard_date: "2018-04-29",
-                 total_point: 90,
-             },
-             ];*/
-
-
-         $scope.opened = {
+        $scope.opened = {
             start: false,
             end: false
         };
@@ -217,6 +136,7 @@
             $scope.opened[attr] = true;
         };
 
-        resetList();
-        loadRelations();
+        loadPersons();
+        loadData();
     }]);
+

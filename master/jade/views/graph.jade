@@ -4,28 +4,16 @@ h3 成长曲线
     .row(style="margin:0 auto")
         canvas#myChart(style="width:1000px")
     hr
-    
-    .row(style="margin:0 auto")
-        form(name='filtrate', style="width:1000px; margin:50 0")
-            h4.m0.pb-lg 筛选
-                p
-                    .input-group
-                        input.form-control(type='text', placeholder='开始日期', ng-model='timeStart', datepicker-popup='{{format}}', is-open='opened.start', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭')
-                        span.input-group-btn
-                            button.btn.btn-default(type='button', ng-click='open($event, "start")')
-                                em.fa.fa-calendar
-                p
-                    .input-group
-                        input.form-control(type='text', placeholder='截止日期', ng-model='timeEnd', datepicker-popup='{{format}}', is-open='opened.end', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭')
-                        span.input-group-btn
-                            button.btn.btn-default(type='button', ng-click='open($event, "end")')
-                                em.fa.fa-calendar
-                form.form-horizontal
-                    label.col-lg-3.control-label 选择部门
-                    .col-lg-3
-                        select.form-control(ng-options='item.departmentId as item.departmentName for item in relations', ng-model='search.departmentId')
-                        .form-group.text-right
-                p
-                    button.btn.btn-block.btn-success(type='button', ng-click='searchList()') 查找
-                p
-                    button.btn.btn-block.btn-default(type='button', ng-click='resetSearch()') 重置
+   .row
+            label.form-inline.col-lg-2 日期:
+                .input-group
+                    input.form-control(type='text', placeholder='开始日期', ng-model='search.timeStart', datepicker-popup='{{format}}', is-open='opened.start', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭',ng-change='loadData()')
+                    span.input-group-btn
+                        button.btn.btn-default(type='button', ng-click='open($event, "start")')
+                            em.fa.fa-calendar
+                .input-group
+                    input.form-control(type='text', placeholder='截止日期', ng-model='search.timeEnd', datepicker-popup='{{format}}', is-open='opened.end', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭',ng-change='loadData()' )
+                    span.input-group-btn
+                        button.btn.btn-default(type='button', ng-click='open($event, "end")')
+                            em.fa.fa-calendar 
+  
