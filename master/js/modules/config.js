@@ -27,28 +27,10 @@ App.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteH
             })
             .state('app.search', {
                 url: '/search',
-                title: '检索本人绩效',
+                title: '查看人员绩效',
                 templateUrl: helper.basepath('search.html'),
                 resolve: helper.resolveFor('ngDialog'),
                 controller: 'SearchController'
-            })
-            .state('app.evaluate', {
-                url: '/evaluate',
-                title: '填写个人考评',
-                templateUrl: helper.basepath('evaluate.html'),
-                resolve: helper.resolveFor('ngDialog', 'moment'),
-                controller: 'EvaluateController'
-            })
-            .state('app.result', {
-                url: '/result',
-                title: '查看本人绩效',
-                params:{
-                    standardDate: '',
-                    departmentId: -1
-                },
-                templateUrl: helper.basepath('result.html'),
-                resolve: helper.resolveFor('ngDialog'),
-                controller: 'ResultController'
             })
             .state('app.setting', {
                 url: '/setting',
@@ -59,7 +41,7 @@ App.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteH
             })
             .state('app.graph', {
                 url: '/graph',
-                title: '查看本人成长曲线',
+                title: '查看人员成长曲线',
                 templateUrl: helper.basepath('graph.html'),
                 resolve: helper.resolveFor('ngDialog', 'chartjs'),
                 controller: 'GraphController'
