@@ -10,7 +10,7 @@ h3 绩效查看
         .row
             .form-inline.col-lg-12
                 label.form-inline 人员:
-                    select.form-control(ng-options='item.id as item.username for item in persons', ng-model='search.personId',ng-change='loadData()')
+                    select.form-control(ng-options='item.key as item.value for item in PersonList', ng-model='search.personId',ng-change='loadData()')
                             .form-group.text-right
                 label.form-inline 得分类型:
                     select.form-control(ng-options=' item.key as item.value for item in IncreaseTypeList', ng-model='search.increaseType',ng-change='loadData()')
@@ -41,6 +41,8 @@ h3 绩效查看
                                 tr
                                     th.col-sm-1 序号
                                     th.col-sm-1 日期
+                                    th.col-sm-1 人员
+                                    th.col-sm-1 任务部门
                                     th.col-sm-1 指标名称 
                                     th.col-sm-1 加分内容
                                     th.col-sm-1 数量
@@ -55,17 +57,19 @@ h3 绩效查看
                                 tr
                                     td {{$index+1}}
                                     td {{item.standardDate | date:'yyyy-MM-dd'}}
+                                    td {{item.username}}
+                                    td {{item.departmentName}}
                                     td {{item.indexName}}
                                     td {{item.increaseName}}({{item.increasePoint}}分/{{item.increaseUnit}})
                                     td {{item.increaseNum}}
                                     td {{item.increaseDetail}}
                                     td {{item.decreaseName}}(-{{item.decreasePoint}}分/{{item.decreaseUnit}})
-                                    td {{item.increaseNum}}
+                                    td {{item.decreaseNum}}
                                     td {{item.decreaseDetail}}
                                     td {{item.totalPoint}}
                                     td 
-                                        input(style="text-align: center;" type="text" placeholder="" ng-model="item.commentContent" ng-hide="disableComment")
-                                        span(ng-show="disableComment"){{item.commentContent}}
+                                        input(style="text-align: left;" type="text" placeholder="" ng-model="item.commentContent" ng-hide="item.leadercomment[0].commentContent" ng-change='commentChanged(item)')
+                                        span(ng-show="item.leadercomment[0].commentContent"){{item.leadercomment[0].username}} : {{item.leadercomment[0].commentContent}}({{item.leadercomment[0].commentTime | date:'yyyy-MM-dd'}});
                             tfoot
                                 tr(ng-if='results.length===0')
                                     td(colspan='11') 暂无数据
@@ -73,8 +77,6 @@ h3 绩效查看
                     hr
                     .row
                         .col-lg-12.text-right
-                            button.btn.btn-primary(type='button', ng-click='editComment()')
-                                span 编辑评语
                             button.btn.btn-primary(type='button', ng-click='saveComment()')
                                 span 保存评语
                     .row
