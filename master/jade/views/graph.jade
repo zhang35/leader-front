@@ -1,19 +1,22 @@
 h3 成长曲线
 
 #container(style="margin:0 auto")
-    .row(style="margin:0 auto")
-        canvas#myChart(style="width:1000px")
-    hr
-   .row
-            label.form-inline.col-lg-2 日期:
+    .row
+        .form-inline.col-lg-12
+            label.form-inline 人员:
+                select.form-control(ng-options='item.key as item.value for item in PersonList', ng-model='search.personId',ng-change='loadData()')
+                        .form-group.text-right
+            label.form-inline 起止日期:
                 .input-group
-                    input.form-control(type='text', placeholder='开始日期', ng-model='search.timeStart', datepicker-popup='{{format}}', is-open='opened.start', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭',ng-change='loadData()')
+                    input.form-control(type='text', placeholder='开始日期', ng-model='timeStart', datepicker-popup='{{format}}', is-open='opened.start', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭',ng-change='loadData()')
                     span.input-group-btn
                         button.btn.btn-default(type='button', ng-click='open($event, "start")')
                             em.fa.fa-calendar
                 .input-group
-                    input.form-control(type='text', placeholder='截止日期', ng-model='search.timeEnd', datepicker-popup='{{format}}', is-open='opened.end', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭',ng-change='loadData()' )
+                    input.form-control(type='text', placeholder='截止日期', ng-model='timeEnd', datepicker-popup='{{format}}', is-open='opened.end', datepicker-options='dateOptions', my-date, ng-required='true', current-text='今天', clear-text='清除', close-text='关闭',ng-change='loadData()' )
                     span.input-group-btn
                         button.btn.btn-default(type='button', ng-click='open($event, "end")')
-                            em.fa.fa-calendar 
-  
+                            em.fa.fa-calendar
+    hr
+    .row(style="margin:0 auto")
+        canvas#myChart(style="width:1000px")

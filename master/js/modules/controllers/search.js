@@ -54,8 +54,6 @@
             personId: 0
         };
 
-
-
         $scope.opened = {
             start: false,
             end: false
@@ -85,7 +83,8 @@
             $http.get($rootScope.url + '/account-service/relations/list?personId=' + $rootScope.account.id)
             .then(function (response) {
                 if (response.data.status === 200) {
-                    $scope.relations = response.data.data[0];
+                    $scope.relations = response.data.data;
+                    $scope.department = $scope.relations[0];
                 } else {
                     $.notify(response.data.message, 'danger');
                 }

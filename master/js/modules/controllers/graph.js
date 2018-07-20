@@ -20,25 +20,15 @@
             ]
         };
 
-
          //默认查看最近30天的成绩
+         $scope.timeStart = moment().subtract(30, 'days').format('YYYY-MM-DD');
+         $scope.timeEnd = moment().format('YYYY-MM-DD');
          $scope.search = {
-            timeStart: moment().subtract(30, 'days').format('YYYY-MM-DD'),
-            timeEnd: moment().format('YYYY-MM-DD'),
+            timeStart: $scope.timeStart,
+            timeEnd: $scope.timeEnd,
+            personId: 0,
+            departmentId: 4,
         };
-
-        var loadPersons = function(){
-            $http.get($rootScope.url + '/account-service/person/list?leader=' + $rootScope.account.id)
-            .then(function (response) {
-                if (response.data.status === 200) {
-                    $scope.persons = response.data.data;
-                } else {
-                    $.notify(response.data.message, 'danger');
-                }
-            }, function (x) {
-                $.notify('服务器出了点问题，我们正在处理', 'danger');
-            });
-        } 
 
         var chartOptions = {
             // ///Boolean - Whether grid lines are shown across the chart
@@ -90,9 +80,8 @@
         // Get context with jQuery - using jQuery's .get() method.
         var ctx = $("#myChart").get(0).getContext("2d");
         // This will get the first returned node in the jQuery collection.
-        var myNewChart = new Chart(ctx);
+        var myNewChart = new Chart(ctx).Line(chartData, chartOptions);
 
-        myNewChart.Line(chartData, chartOptions);
         var buildParam = function () {
             var param = {
                 method: 'GET',
@@ -101,26 +90,53 @@
             };
             return param;
         }; 
-        var loadData = function () {
+        $scope.loadData = function () {
+            if (!!$scope.timeStart) {
+                var date = new Date($scope.timeStart);
+                $scope.search.timeStart = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' 00:00:00';
+            }
+
+            if (!!$scope.timeEnd) {
+                var date = new Date($scope.timeEnd);
+                $scope.search.timeEnd = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' 23:59:59';
+            }
+
             $http(buildParam())
             .then(function (response) {
                 if (response.data.status === 200) {
-                    $scope.data = response.data.data;
-                    $scope.data.forEach(function (data_i, index,array) {
+
+                    //清空之前的
+                    chartData.labels = [];
+                    chartData.datasets[0].data = [];         
+
+                    $scope.data = response.data.data;   
+
+                    //填写人名标签
+                    var currentPerson = $rootScope.PersonList.find(function(person){
+                        return person.key ===  $scope.data[0].personId;
+                    });
+                    chartData.datasets[0].label = currentPerson.value;
+
+                    //填写数据集
+                    $scope.data.forEach(function (data_i) {
                         chartData.labels.push(moment(data_i.recordDate).format('YYYY-MM-DD'));
                         chartData.datasets[0].data.push(data_i.score);
-                        if(index==array.length-1){
-                            console.log("chartData:"+JSON.stringify(chartData));
-                            myNewChart.Line(chartData, chartOptions);
-
-                        }
                     });
-                } else {
-                    $.notify(response.data.message, 'danger');
-                }
-            }, function (x) {
-                $.notify('服务器出了点问题，我们正在处理', 'danger');
-            });
+                    // console.log("chartData:"+JSON.stringify(chartData));
+                            // myNewChart.Line(chartData, chartOptions);
+                    // myNewChart.clear();
+                    //先移除原先画布，再重画，否则会出现重叠。
+                    $('#myChart').remove();
+                    $('#container').append('<canvas id="myChart" style="width:1000px"></canvas>');
+                    ctx = $("#myChart").get(0).getContext("2d");
+                    myNewChart = new Chart(ctx).Line(chartData, chartOptions);
+                } 
+                else {
+                            $.notify(response.data.message, 'danger');
+                        }
+                    }, function (x) {
+                        $.notify('服务器出了点问题，我们正在处理', 'danger');
+                    });
         };            
 
 
@@ -136,7 +152,6 @@
             $scope.opened[attr] = true;
         };
 
-        loadPersons();
-        loadData();
+        // loadData();
     }]);
 
