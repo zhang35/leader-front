@@ -27,7 +27,7 @@
             timeStart: $scope.timeStart,
             timeEnd: $scope.timeEnd,
             personId: 0,
-            departmentId: 4,
+            departmentId: 0,
         };
 
         $scope.GraphPersonList = $rootScope.PersonList;
@@ -84,6 +84,20 @@
         // This will get the first returned node in the jQuery collection.
         var myNewChart = new Chart(ctx).Line(chartData, chartOptions);
 
+        $scope.loadRelations = function () {
+            $http.get($rootScope.url + '/account-service/relations/list?personId=' + $scope.search.personId)
+                .then(function (response) {
+                    if (response.data.status === 200) {
+                        $scope.relations = response.data.data;
+                        $scope.search.departmentId = $scope.relations[0].departmentId;
+                        $scope.loadData();
+                    } else {
+                        $.notify(response.data.message, 'danger');
+                    }
+                }, function (x) {
+                    $.notify('服务器出了点问题，我们正在处理', 'danger');
+                });
+        }
         var buildParam = function () {
             var param = {
                 method: 'GET',
@@ -93,6 +107,23 @@
             return param;
         }; 
         $scope.loadData = function () {
+            //清空之前的
+            chartData.datasets[0] = {
+                label: "",
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(151,187,205,1)",
+                data: []
+            }
+
+            chartData.labels = [];
+
+            //先移除原先画布，再重画，否则会出现重叠。
+            $('#myChart').remove();
+
             if (!!$scope.timeStart) {
                 var date = new Date($scope.timeStart);
                 $scope.search.timeStart = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' 00:00:00';
@@ -107,19 +138,6 @@
             .then(function (response) {
                 if (response.data.status === 200) {
 
-                    //清空之前的
-                    chartData.datasets[0] = {
-                        label: "",
-                        fillColor: "rgba(151,187,205,0.2)",
-                        strokeColor: "rgba(151,187,205,1)",
-                        pointColor: "rgba(151,187,205,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(151,187,205,1)",
-                        data: []
-                    }
-
-                    chartData.labels = [];
 
                     $scope.data = response.data.data;   
 
@@ -137,8 +155,7 @@
                     // console.log("chartData:"+JSON.stringify(chartData));
                             // myNewChart.Line(chartData, chartOptions);
                     // myNewChart.clear();
-                    //先移除原先画布，再重画，否则会出现重叠。
-                    $('#myChart').remove();
+                    //重新绘图
                     $('#container').append('<canvas id="myChart" style="width:1000px"></canvas>');
                     ctx = $("#myChart").get(0).getContext("2d");
                     myNewChart = new Chart(ctx).Line(chartData, chartOptions);
