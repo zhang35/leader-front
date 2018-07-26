@@ -8,13 +8,13 @@
             labels: [],
             datasets: [
             {
-                label: "My First dataset",
-                fillColor: "rgba(151,187,205,0.2)",
-                strokeColor: "rgba(151,187,205,1)",
-                pointColor: "rgba(151,187,205,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(151,187,205,1)",
+                // label: "My First dataset",
+                // fillColor: "rgba(151,187,205,0.2)",
+                // strokeColor: "rgba(151,187,205,1)",
+                // pointColor: "rgba(151,187,205,1)",
+                // pointStrokeColor: "#fff",
+                // pointHighlightFill: "#fff",
+                // pointHighlightStroke: "rgba(151,187,205,1)",
                 data: []
             },
             ]
@@ -30,6 +30,8 @@
             departmentId: 4,
         };
 
+        $scope.GraphPersonList = $rootScope.PersonList;
+        $scope.GraphPersonList[0].value = "请选择";
         var chartOptions = {
             // ///Boolean - Whether grid lines are shown across the chart
             scaleShowGridLines: true,
@@ -106,13 +108,23 @@
                 if (response.data.status === 200) {
 
                     //清空之前的
+                    chartData.datasets[0] = {
+                        label: "",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: []
+                    }
+
                     chartData.labels = [];
-                    chartData.datasets[0].data = [];         
 
                     $scope.data = response.data.data;   
 
                     //填写人名标签
-                    var currentPerson = $rootScope.PersonList.find(function(person){
+                    var currentPerson = $scope.GraphPersonList.find(function(person){
                         return person.key ===  $scope.data[0].personId;
                     });
                     chartData.datasets[0].label = currentPerson.value;

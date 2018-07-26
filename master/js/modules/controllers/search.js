@@ -35,7 +35,7 @@
 
         $rootScope.PersonList = [{
             key: 0,
-            value:"全部"
+            value:"全部",
         }
         ];
 
@@ -66,7 +66,7 @@
                     $scope.persons = response.data.data;
                     
                     var person = {};
-                    response.data.data.forEach(function(person){
+                    response.data.data.forEach(function(person, index){
                         person.key = person.id;
                         person.value = person.username;
                        $rootScope.PersonList.push(person);

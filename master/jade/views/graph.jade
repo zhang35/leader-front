@@ -4,7 +4,7 @@ h3 成长曲线
     .row
         .form-inline.col-lg-12
             label.form-inline 人员:
-                select.form-control(ng-options='item.key as item.value for item in PersonList', ng-model='search.personId',ng-change='loadData()')
+                select.form-control(ng-options='item.key as item.value for item in GraphPersonList', ng-model='search.personId',ng-change='loadData()')
                         .form-group.text-right
             label.form-inline 起止日期:
                 .input-group
