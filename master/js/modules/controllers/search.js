@@ -35,7 +35,7 @@
 
         $rootScope.PersonList = [{
             key: 0,
-            value:"全部"
+            value:"全部",
         }
         ];
 
@@ -54,8 +54,6 @@
             personId: 0
         };
 
-
-
         $scope.opened = {
             start: false,
             end: false
@@ -68,7 +66,7 @@
                     $scope.persons = response.data.data;
                     
                     var person = {};
-                    response.data.data.forEach(function(person){
+                    response.data.data.forEach(function(person, index){
                         person.key = person.id;
                         person.value = person.username;
                        $rootScope.PersonList.push(person);
@@ -85,7 +83,8 @@
             $http.get($rootScope.url + '/account-service/relations/list?personId=' + $rootScope.account.id)
             .then(function (response) {
                 if (response.data.status === 200) {
-                    $scope.relations = response.data.data[0];
+                    $scope.relations = response.data.data;
+                    $scope.department = $scope.relations[0];
                 } else {
                     $.notify(response.data.message, 'danger');
                 }
