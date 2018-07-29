@@ -37,7 +37,13 @@ App.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteH
                 title: '个人信息维护',
                 templateUrl: helper.basepath('setting.html'),
                 resolve: helper.resolveFor('ngDialog'),
-                controller: 'SearchController'
+                controller: 'SettingController'
+            })
+            .state('app.contact', {
+                url: '/contact',
+                title: '联系我们',
+                templateUrl: helper.basepath('contact.html'),
+                resolve: helper.resolveFor('ngDialog'),
             })
             .state('app.graph', {
                 url: '/graph',
