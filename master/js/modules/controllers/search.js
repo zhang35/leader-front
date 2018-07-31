@@ -33,11 +33,17 @@
         }
         ];
 
-        $rootScope.PersonList = [{
+        $scope.PersonList = [{
             key: 0,
-            value:"全部",
+            value:"请选择",
         }
         ];
+
+
+        $rootScope.DepartmentList = [{
+            key: 0,
+            value:"请选择",
+        }];
 
         $scope.timeStart = moment().subtract(7, 'days').format('YYYY-MM-DD')
         $scope.timeEnd = moment().format('YYYY-MM-DD');
@@ -51,7 +57,8 @@
             timeEnd: '',
             page: 1,
             size: 10,
-            personId: 0
+            personId: 0,
+            departmentId: 0
         };
 
         $scope.opened = {
@@ -59,18 +66,77 @@
             end: false
         };
 
-        var loadPersons = function(){
-            $http.get($rootScope.url + '/account-service/person/list?leader=' + $rootScope.account.id)
+        var loadRelations = function () {
+            $http.get($rootScope.url + '/account-service/relations/list?personId=' + $rootScope.account.id)
             .then(function (response) {
                 if (response.data.status === 200) {
-                    $scope.persons = response.data.data;
-                    
-                    var person = {};
-                    response.data.data.forEach(function(person, index){
-                        person.key = person.id;
-                        person.value = person.username;
-                       $rootScope.PersonList.push(person);
+                    $scope.relations = response.data.data;
+                    $scope.department = $scope.relations[0];
+                    loadDepartments();
+                } else {
+                    $.notify(response.data.message, 'danger');
+                }
+            }, function (x) {
+                $.notify('服务器出了点问题，我们正在处理', 'danger');
+            });
+            
+        }
+
+        var loadDepartments = function(){
+         var httpUrl = "";
+            //常委查看所有部门
+            if ($rootScope.account.role === 1){
+                httpUrl = $rootScope.url + '/account-service/department/list?departmentType=2';
+            }
+            //部门领导只看自己领导的部门
+            else if($rootScope.account.role ===2 ){
+                httpUrl = $rootScope.url + '/account-service/department/list?id=' + $rootScope.account.leader;
+            }
+
+            $http.get(httpUrl)
+            .then(function (response) {
+                if (response.data.status === 200) {
+                    response.data.data.forEach(function(item){
+                        var department = {};
+                        department.key = item.id;
+                        department.value = item.departmentName;
+                        $rootScope.DepartmentList.push(department);
+                    });
+                    $scope.search.department = 0;
+
+                    // $scope.loadPersons();
+                } else {
+                    $.notify(response.data.message, 'danger');
+                }
+            }, function (x) {
+                $.notify('服务器出了点问题，我们正在处理', 'danger');
+            }); 
+        }
+
+        $scope.loadPersons = function(){
+            //当前部门下的人员
+            var httpUrl = $rootScope.url + '/account-service/person/list?role=3&leader=' + $scope.search.departmentId;
+            $http.get(httpUrl)
+            .then(function (response) {
+                if (response.data.status === 200) {
+
+                    $scope.PersonList = [{
+                        key: 0,
+                        value:"请选择",
+                    }
+                    ];
+
+                    response.data.data.forEach(function(item){
+                        var person = {};
+                        if (item.role===3){
+                            person.key = item.id;
+                            person.value = item.username;
+                            $scope.PersonList.push(person);
+                        }
                     })
+
+                    $scope.search.personId = 0;
+
                 } else {
                     $.notify(response.data.message, 'danger');
                 }
@@ -79,19 +145,6 @@
             });
         }
 
-        var loadRelations = function () {
-            $http.get($rootScope.url + '/account-service/relations/list?personId=' + $rootScope.account.id)
-            .then(function (response) {
-                if (response.data.status === 200) {
-                    $scope.relations = response.data.data;
-                    $scope.department = $scope.relations[0];
-                } else {
-                    $.notify(response.data.message, 'danger');
-                }
-            }, function (x) {
-                $.notify('服务器出了点问题，我们正在处理', 'danger');
-            });
-        }
         var buildParam = function () {
             var param = {
                 method: 'GET',
@@ -120,15 +173,15 @@
                 $scope.items = response.data.data.list;
                 $scope.totalItems = response.data.data.total;
 
-                } else {
-                    $.notify(response.data.message, 'danger');
-                }
-            }, function (x) {
-                $.notify('服务器出了点问题，我们正在处理', 'danger');
-            });
+            } else {
+                $.notify(response.data.message, 'danger');
+            }
+        }, function (x) {
+            $.notify('服务器出了点问题，我们正在处理', 'danger');
+        });
        };
 
-    $scope.commentChanged = function(item){
+       $scope.commentChanged = function(item){
         item.commentChanged = true;
     }
 
@@ -189,8 +242,4 @@
 
 
         loadRelations();
-
-        loadPersons();
-
-        $scope.loadData();
     }]);

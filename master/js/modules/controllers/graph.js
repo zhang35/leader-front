@@ -27,11 +27,15 @@
             timeStart: $scope.timeStart,
             timeEnd: $scope.timeEnd,
             personId: 0,
-            departmentId: 0,
+            departmentId: 0
         };
 
-        $scope.GraphPersonList = $rootScope.PersonList;
-        $scope.GraphPersonList[0].value = "请选择";
+        $scope.PersonList = [{
+            key: 0,
+            value:"请选择",
+        }
+        ];
+
         var chartOptions = {
             // ///Boolean - Whether grid lines are shown across the chart
             scaleShowGridLines: true,
@@ -84,20 +88,68 @@
         // This will get the first returned node in the jQuery collection.
         var myNewChart = new Chart(ctx).Line(chartData, chartOptions);
 
-        $scope.loadRelations = function () {
-            $http.get($rootScope.url + '/account-service/relations/list?personId=' + $scope.search.personId)
-                .then(function (response) {
-                    if (response.data.status === 200) {
-                        $scope.relations = response.data.data;
-                        $scope.search.departmentId = $scope.relations[0].departmentId;
-                        $scope.loadData();
-                    } else {
-                        $.notify(response.data.message, 'danger');
+        // var loadDepartments = function(){
+        //    var httpUrl = "";
+        //     //常委查看所有部门
+        //     if ($rootScope.account.role === 1){
+        //         httpUrl = $rootScope.url + '/account-service/department/list?departmentType=2';
+        //     }
+        //     //部门领导只看自己领导的部门
+        //     else if($rootScope.account.role ===2 ){
+        //         httpUrl = $rootScope.url + '/account-service/department/list?departmentId=' + $rootScope.account.leader;
+        //     }
+
+        //     $http.get(httpUrl)
+        //     .then(function (response) {
+        //         if (response.data.status === 200) {
+        //             response.data.data.forEach(function(item){
+        //                 var department = {};
+        //                 department.key = item.id;
+        //                 department.value = item.departmentName;
+        //                 $rootScope.DepartmentList.push(department);
+        //             });
+        //             $scope.search.department = 0;
+
+        //             // $scope.loadPersons();
+        //         } else {
+        //             $.notify(response.data.message, 'danger');
+        //         }
+        //     }, function (x) {
+        //         $.notify('服务器出了点问题，我们正在处理', 'danger');
+        //     }); 
+        // }
+
+        $scope.loadPersons = function(){
+            //当前部门下的人员
+            var httpUrl = $rootScope.url + '/account-service/person/list?role=3&leader=' + $scope.search.departmentId;
+            $http.get(httpUrl)
+            .then(function (response) {
+                if (response.data.status === 200) {
+
+                    $scope.PersonList = [{
+                        key: 0,
+                        value:"请选择",
                     }
-                }, function (x) {
-                    $.notify('服务器出了点问题，我们正在处理', 'danger');
-                });
+                    ];
+                    response.data.data.forEach(function(item){
+                        var person = {};
+                        if (item.role === 3){
+                            person.key = item.id;
+                            person.value = item.username;
+                            $scope.PersonList.push(person);
+                        }
+                    });
+
+                    $scope.search.personId = 0;
+                    
+                } else {
+                    $.notify(response.data.message, 'danger');
+                }
+            }, function (x) {
+                $.notify('服务器出了点问题，我们正在处理', 'danger');
+            });
         }
+
         var buildParam = function () {
             var param = {
                 method: 'GET',
@@ -109,7 +161,7 @@
         $scope.loadData = function () {
             //清空之前的
             chartData.datasets[0] = {
-                label: "",
+                label: "量化得分",
                 fillColor: "rgba(151,187,205,0.2)",
                 strokeColor: "rgba(151,187,205,1)",
                 pointColor: "rgba(151,187,205,1)",
@@ -142,10 +194,10 @@
                     $scope.data = response.data.data;   
 
                     //填写人名标签
-                    var currentPerson = $scope.GraphPersonList.find(function(person){
-                        return person.key ===  $scope.data[0].personId;
-                    });
-                    chartData.datasets[0].label = currentPerson.value;
+                    // var currentPerson = $scope.GraphPersonList.find(function(person){
+                    //     return person.key ===  $scope.data[0].personId;
+                    // });
+                    // chartData.datasets[0].label = currentPerson.value;
 
                     //填写数据集
                     $scope.data.forEach(function (data_i) {
@@ -181,6 +233,6 @@
             $scope.opened[attr] = true;
         };
 
-        // loadData();
+        console.log(JSON.stringify($rootScope.DepartmentList));
     }]);
 
